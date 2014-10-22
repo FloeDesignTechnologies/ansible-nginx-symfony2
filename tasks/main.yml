@@ -1,0 +1,27 @@
+---
+# tasks file for nginx-symfony2
+- name: Make sure the nginx-ssl directory exists
+  file: path=/etc/nginx/ssl state=directory
+
+- name: Check if the dhparam file is already generated
+  file: path=/etc/nginx/ssl/dhparam.pem state=file
+  register: dhparam_file
+  ignore_errors: True
+
+- name: Generate ssl Diffie Hellman parameter file (takes a while)
+  shell: openssl dhparam -out /etc/nginx/ssl/dhparam.pem 2048
+  when: dhparam_file.state == 'absent'
+
+- name: Create the nginx configs for each sites
+  template: src=vhost.j2 dest=/etc/nginx/sites-available/{{ item.name }}.conf
+  with_items: nginx_sf2
+
+- name: Enable sites
+  file: src=/etc/nginx/sites-available/{{ item.name }}.conf dest=/etc/nginx/sites-enabled/{{ item.name }}.conf state=link
+  when: item.enabled is not defined or item.enabled == True
+  with_items: nginx_sf2
+
+- name: Disable sites
+  file: path=/etc/nginx/sites-enabled/{{ item.name }} state=absent
+  when: item.enabled is defined and item.enabled == False
+  with_items: nginx_sf2

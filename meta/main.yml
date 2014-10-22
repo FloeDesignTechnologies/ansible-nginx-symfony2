@@ -1,0 +1,14 @@
+---
+galaxy_info:
+  author: Pierre Paul Lefebvre
+  description: Very simple module to configure nginx for a symfony2 website. Expects another nginx role to expose the nginx reload handler and php-fpm to expose either a unix or tcp socket.
+  company: Pheromone
+  license: GPLv2
+  min_ansible_version: 1.5
+  platforms:
+  - name: Ubuntu
+    versions:
+    - trusty
+  categories:
+  - web
+dependencies: []
