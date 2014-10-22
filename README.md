@@ -1,4 +1,4 @@
-Role Name
+nginx-symfony2
 ========
 
 Very simple role to configure a symfony2 site with nginx.
