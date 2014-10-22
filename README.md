@@ -17,7 +17,7 @@ Example Playbook
          - role: nginx-symfony2
            nginx_sf2:
             - name: Super cool Sf2 site
-              socket: /var/run/php5-fpm.sock
+              socket: unix:/var/run/php5-fpm.sock
               root: /var/www/
 
             - name: Super cool SECURE sf2 site
