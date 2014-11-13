@@ -21,7 +21,7 @@ server {
     ssl_stapling_verify on;
     resolver 8.8.4.4 8.8.8.8 valid=300s;
     resolver_timeout 10s;
-    ssl_dhparam /etc/ssl/certs/dhparam.pem;
+    ssl_dhparam /etc/nginx/ssl/dhparam.pem;
     add_header Strict-Transport-Security max-age=63072000;
     add_header X-Frame-Options DENY;
     add_header X-Content-Type-Options nosniff;
@@ -29,6 +29,12 @@ server {
  
     error_log {{ item.error_log|default('/var/log/nginx/error.log') }};
     access_log {{ item.access_log|default('/var/log/nginx/access.log') }};
+    {% if client_header_buffer_size is defined %}
+        client_header_buffer_size {{ client_header_buffer_size }};
+    {% endif %}
+    {% if large_client_header_buffers is defined %}
+        large_client_header_buffers {{ large_client_header_buffers }};
+    {% endif %}
  
     # strip app.php/ prefix if it is present
     rewrite ^/app\.php/?(.*)$ /$1 permanent;
